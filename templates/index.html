@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="text-3xl font-bold text-center mb-6">
+    📝 HoJo – let's get things done!
+</h1>
+
+<p class="text-center text-gray-600 mb-8">
+    Flask + HTMX + Tailwind
+</p>
+
+<!-- Task Input Form -->
+<div class="max-w-md mx-auto bg-white p-6 rounded-xl shadow">
+    <form 
+    hx-post="/add-task"
+    hx-target="#task-list"
+    hx-swap="innerHTML"
+    hx-on="htmx:afterRequest:this.reset()"
+>
+    <input
+        type="text"
+        name="task"
+        placeholder="Enter a new task..."
+        class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+        required
+    />
+
+    <button
+        class="mt-4 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+    >
+        Add Task
+    </button>
+</form>
+
+<div id="task-list"></div>
+
+</div>
+{% endblock %}
