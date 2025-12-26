@@ -1,23 +1,56 @@
-{% if tasks %}
-<ul class="mt-6 space-y-2">
-    {% for task in tasks %}
-        <li class="flex items-center justify-between bg-gray-100 px-4 py-2 rounded shadow">
-            <span class="text-gray-800">{{ task }}</span>
+<ul id="task-list" class="mt-6 space-y-2">
+    {% if tasks %}
+        {% for task in tasks %}
+            <li class="flex items-center justify-between bg-gray-100 px-4 py-2 rounded shadow">
 
-            <button
-                hx-post="/delete-task/{{ loop.index0 }}"
-                hx-target="#task-list"
-                hx-swap="innerHTML"
-                class="text-red-500 hover:text-red-700 hover:scale-110 transition transform duration-150"
-                title="Delete task"
-            >
-                ❌
-            </button>
+                <div class="flex items-center gap-3">
+
+                    <!-- Toggle complete -->
+                    <button
+                        hx-post="/toggle-task/{{ task['id'] }}"
+                        hx-target="#task-list"
+                        hx-swap="innerHTML"
+                        class="text-green-600 hover:scale-110 transition"
+                        title="Toggle complete"
+                    >
+                        {% if task['completed'] %}
+                            ✔
+                        {% else %}
+                            ⭕
+                        {% endif %}
+                    </button>
+
+                    <!-- Task text -->
+                    <span
+                        class="
+                            {% if task['completed'] %}
+                                line-through text-gray-400 bg-green-100 px-2 py-1 rounded
+                            {% else %}
+                                text-gray-800
+                            {% endif %}
+                        "
+                    >
+                        {{ task['title'] }}
+                    </span>
+
+                </div>
+
+                <!-- Delete -->
+                <button
+                    hx-post="/delete-task/{{ task['id'] }}"
+                    hx-target="#task-list"
+                    hx-swap="innerHTML"
+                    class="text-red-500 hover:text-red-700 hover:scale-110 transition"
+                    title="Delete task"
+                >
+                    ✖
+                </button>
+
+            </li>
+        {% endfor %}
+    {% else %}
+        <li class="text-center text-gray-500 italic">
+            No tasks yet. Add your first one 😊
         </li>
-    {% endfor %}
+    {% endif %}
 </ul>
-{% else %}
-<p class="mt-6 text-center text-gray-500 italic">
-    No tasks yet. Add your first one 😊
-</p>
-{% endif %}
